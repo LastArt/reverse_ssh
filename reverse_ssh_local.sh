@@ -1,6 +1,6 @@
 #!/bin/bash
-# revers_ssh_local.sh
-# Скрипт для настройки обратного SSH-туннеля с устройства c динмаическим IP
+# reverse_ssh_local.sh
+# Скрипт для настройки обратного SSH‑туннеля с устройства с динамическим IP
 
 # Запрос данных у пользователя
 read -p "Введите IP-адрес сервера тунелирования: " SERVER_IP
@@ -10,19 +10,19 @@ LOCAL_PORT=${LOCAL_PORT:-22}
 read -p "Введите удалённый порт для туннеля (например, 2222): " REMOTE_PORT
 
 echo ""
-echo "Настройка обратного SSH-туннеля:"
+echo "Настройка обратного SSH‑туннеля:"
 echo "Сервер: $SERVER_IP"
 echo "Пользователь на сервере: $SERVER_USER"
 echo "Локальный порт (устройство): $LOCAL_PORT"
 echo "Удалённый порт (на сервере): $REMOTE_PORT"
 echo ""
 
-# Предлагаем использовать autossh, если он установлен
+# Проверка наличия autossh
 if command -v autossh >/dev/null 2>&1; then
     echo "Найден autossh для мониторинга туннеля."
     read -p "Использовать autossh для автоматического восстановления соединения? [Y/n]: " use_autossh
     if [[ "$use_autossh" =~ ^[Yy] || -z "$use_autossh" ]]; then
-        CMD="autossh -M 0 -N -o \"ServerAliveInterval 30\" -o \"ServerAliveCountMax 3\" -R ${REMOTE_PORT}:localhost:${LOCAL_PORT} ${SERVER_USER}@${SERVER_IP}"
+        CMD="autossh -M 0 -N -o 'ServerAliveInterval 30' -o 'ServerAliveCountMax 3' -R ${REMOTE_PORT}:localhost:${LOCAL_PORT} ${SERVER_USER}@${SERVER_IP}"
     else
         CMD="ssh -N -R ${REMOTE_PORT}:localhost:${LOCAL_PORT} ${SERVER_USER}@${SERVER_IP}"
     fi
@@ -33,8 +33,8 @@ fi
 
 echo ""
 echo "Выполняется команда для установки обратного туннеля:"
-echo $CMD
+echo "$CMD"
 echo ""
 
-# Запуск команды (она останется активной, т.к. используется -N)
-eval $CMD
+# Запуск команды (будет оставаться активной, т.к. используется -N)
+eval "$CMD"
